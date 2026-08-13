@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업용 모둠 구성기</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #2b6cb0;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #2d3748;
+            white-space: nowrap;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #3182ce;
+        }
+
+        .setting-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        input[type="number"] {
+            width: 90px;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #3182ce;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(49, 130, 206, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #2b6cb0;
+            transform: translateY(-2px);
+        }
+
+        .btn-reassign {
+            background-color: #805ad5;
+            box-shadow: 0 4px 6px rgba(128, 90, 213, 0.3);
+        }
+
+        .btn-reassign:hover {
+            background-color: #6b46c1;
+        }
+
+        .btn-secondary {
+            background-color: #38a169;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: bold;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2f855a;
+        }
+
+        .btn-upload {
+            background-color: #4a5568;
+            color: white;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-upload:hover {
+            background-color: #2d3748;
+        }
+
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .group-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            border-top: 6px solid #3182ce;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .group-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px dashed #edf2f7;
+        }
+
+        .group-title-input {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            border: none;
+            border-bottom: 2px transparent;
+            background: transparent;
+            width: 70%;
+            outline: none;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .group-title-input:hover, .group-title-input:focus {
+            background: #edf2f7;
+            border-bottom: 2px solid #3182ce;
+        }
+
+        .group-member-count {
+            font-size: 0.9rem;
+            color: #718096;
+            white-space: nowrap;
+        }
+
+        .group-card ul {
+            list-style: none;
+            flex-grow: 1;
+            margin-bottom: 12px;
+        }
+
+        .student-item {
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            background: #f7fafc;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e2e8f0;
+        }
+
+        .student-item:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .student-item.pinned {
+            background: #ebf8ff;
+            border-color: #3182ce;
+            color: #2b6cb0;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(49, 130, 206, 0.15);
+        }
+
+        .student-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-remove-student {
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .btn-remove-student:hover {
+            opacity: 1;
+            background-color: #fed7d7;
+        }
+
+        .add-student-box {
+            display: flex;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .add-student-input {
+            flex-grow: 1;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .add-student-input:focus {
+            border-color: #3182ce;
+        }
+
+        .btn-add-student {
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-add-student:hover {
+            background-color: #2d3748;
+        }
+
+        .message-box {
+            display: none;
+            padding: 10px 15px;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .group-card:nth-child(5n+1) { border-top-color: #3182ce; }
+        .group-card:nth-child(5n+2) { border-top-color: #dd6b20; }
+        .group-card:nth-child(5n+3) { border-top-color: #38a169; }
+        .group-card:nth-child(5n+4) { border-top-color: #805ad5; }
+        .group-card:nth-child(5n+0) { border-top-color: #d53f8c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>수업용 모둠 구성기</h1>
+        <p class="subtitle">학생 이름을 입력하거나 파일로 업로드하고, 무작위 모둠을 편성하세요!</p>
+    </header>
+
+    <div class="main-content">
+        <div class="input-section">
+            <div class="label-row">
+                <label for="nameInput">학생 명단 (한 줄에 한 명)</label>
+                <button class="btn-upload" onclick="document.getElementById('fileInput').click()">📁 파일 불러오기</button>
+                <input type="file" id="fileInput" accept=".csv, .txt, .xlsx, .xls" style="display: none;" onchange="handleFileUpload(event)">
+            </div>
+            
+            <textarea id="nameInput" placeholder="김철수&#10;이영희&#10;박민수&#10;정수진&#10;(엑셀에서 복사해 붙여넣거나 파일 업로드도 가능합니다)"></textarea>
+
+            <div class="setting-group">
+                <label for="groupCount">모둠 개수</label>
+                <input type="number" id="groupCount" min="1" max="30" value="4">
+            </div>
+
+            <button class="btn-primary" onclick="makeGroups(false)">모둠 나누기</button>
+            <button class="btn-primary btn-reassign" onclick="makeGroups(true)">📌 고정 제외 재편성</button>
+            <div id="msgBox" class="message-box"></div>
+        </div>
+
+        <div class="result-section">
+            <div class="result-header">
+                <h2>모둠 편성 결과</h2>
+                <button class="btn-secondary" id="copyBtn" onclick="copyResults()" style="display: none;">📋 결과 복사하기</button>
+            </div>
+            <div id="groupsGrid" class="groups-grid">
+                <p style="color: #a0aec0; grid-column: 1/-1; text-align: center; padding: 40px 0;">
+                    왼쪽에서 학생 명단을 입력하고 '모둠 나누기' 버튼을 눌러주세요.<br>
+                    <small style="color: #cbd5e0; font-size: 0.9rem;">(배정 후 이름 옆 📌 아이콘으로 학생을 고정하거나 수동 추가/삭제가 가능합니다)</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let pinnedStudents = {};
+    let currentGroups = [];
+    let customGroupNames = {};
+
+    window.onload = function() {
+        const savedNames = localStorage.getItem('teacher_student_names');
+        if (savedNames) {
+            document.getElementById('nameInput').value = savedNames;
+        }
+    };
+
+    function showMessage(msg) {
+        const msgBox = document.getElementById('msgBox');
+        msgBox.innerText = msg;
+        msgBox.style.display = 'block';
+        setTimeout(() => {
+            msgBox.style.display = 'none';
+        }, 3500);
+    }
+
+    // 엑셀/CSV/TXT 파일 읽기 처리
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            const lines = content.split(/[\r\n]+/);
+            const extractedNames = [];
+
+            lines.forEach(line => {
+                let cleaned = line.replace(/["']/g, '').trim();
+                if (cleaned) {
+                    const items = cleaned.split(/[,;\t]+/);
+                    items.forEach(item => {
+                        const trimmed = item.trim();
+                        if (trimmed) extractedNames.push(trimmed);
+                    });
+                }
+            });
+
+            if (extractedNames.length > 0) {
+                document.getElementById('nameInput').value = extractedNames.join('\n');
+                showMessage(`📄 ${file.name} 파일에서 ${extractedNames.length}명의 명단을 불러왔습니다.`);
+            } else {
+                showMessage('⚠️ 파일에서 이름을 찾을 수 없습니다.');
+            }
+            event.target.value = '';
+        };
+
+        reader.readAsText(file, 'UTF-8');
+    }
+
+    function makeGroups(keepPinned = false) {
+        const rawNames = document.getElementById('nameInput').value;
+        const groupCount = parseInt(document.getElementById('groupCount').value);
+
+        const names = rawNames.split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
+
+        if (names.length === 0) {
+            showMessage('학생 이름을 1명 이상 입력해 주세요.');
+            return;
+        }
+
+        if (isNaN(groupCount) || groupCount < 1) {
+            showMessage('올바른 모둠 개수를 입력해 주세요.');
+            return;
+        }
+
+        localStorage.setItem('teacher_student_names', rawNames);
+
+        const groups = Array.from({ length: groupCount }, () => []);
+
+        if (!keepPinned) {
+            pinnedStudents = {};
+        } else {
+            const validPinned = {};
+            for (const [name, gIdx] of Object.entries(pinnedStudents)) {
+                if (names.includes(name) && gIdx < groupCount) {
+                    validPinned[name] = gIdx;
+                }
+            }
+            pinnedStudents = validPinned;
+        }
+
+        const unpinnedNames = [];
+        names.forEach(name => {
+            if (keepPinned && pinnedStudents[name] !== undefined) {
+                groups[pinnedStudents[name]].push(name);
+            } else {
+                unpinnedNames.push(name);
+            }
+        });
+
+        // 무작위 셔플 (Fisher-Yates)
+        for (let i = unpinnedNames.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [unpinnedNames[i], unpinnedNames[j]] = [unpinnedNames[j], unpinnedNames[i]];
+        }
+
+        // 인원 균등 배분
+        unpinnedNames.forEach(name => {
+            let minIdx = 0;
+            let minSize = groups[0].length;
+            for (let i = 1; i < groupCount; i++) {
+                if (groups[i].length < minSize) {
+                    minSize = groups[i].length;
+                    minIdx = i;
+                }
+            }
+            groups[minIdx].push(name);
+        });
+
+        renderGroups(groups);
+    }
+
+    function togglePin(name, groupIdx) {
+        if (pinnedStudents[name] === groupIdx) {
+            delete pinnedStudents[name];
+            showMessage(`📌 ${name} 학생 고정이 해제되었습니다.`);
+        } else {
+            pinnedStudents[name] = groupIdx;
+            showMessage(`📌 ${name} 학생이 고정되었습니다.`);
+        }
+        renderGroups(currentGroups);
+    }
+
+    // 수동으로 모둠에 전입생/추가 학생 넣기
+    function addStudentToGroup(groupIdx) {
+        const inputEl = document.getElementById(`addInput-${groupIdx}`);
+        const name = inputEl.value.trim();
+
+        if (!name) return;
+
+        currentGroups[groupIdx].push(name);
+
+        // 명단 입력란(textarea)에도 자동으로 추가해 지속 반영
+        const textarea = document.getElementById('nameInput');
+        const currentText = textarea.value.trim();
+        const updatedText = currentText ? `${currentText}\n${name}` : name;
+        textarea.value = updatedText;
+        localStorage.setItem('teacher_student_names', updatedText);
+
+        showMessage(`➕ ${name} 학생이 ${getGroupName(groupIdx)}에 추가되었습니다.`);
+        renderGroups(currentGroups);
+    }
+
+    // 전출/삭제 처리
+    function removeStudentFromGroup(groupIdx, studentName) {
+        // 해당 모둠에서 제거
+        currentGroups[groupIdx] = currentGroups[groupIdx].filter(m => m !== studentName);
+        delete pinnedStudents[studentName];
+
+        // 명단 입력란(textarea)에서도 제거
+        const textarea = document.getElementById('nameInput');
+        const lines = textarea.value.split('\n').map(l => l.trim()).filter(l => l !== studentName && l.length > 0);
+        const updatedText = lines.join('\n');
+        textarea.value = updatedText;
+        localStorage.setItem('teacher_student_names', updatedText);
+
+        showMessage(`🗑️ ${studentName} 학생이 삭제되었습니다.`);
+        renderGroups(currentGroups);
+    }
+
+    function updateGroupName(groupIdx, newName) {
+        customGroupNames[groupIdx] = newName.trim();
+    }
+
+    function getGroupName(groupIdx) {
+        return customGroupNames[groupIdx] || `${groupIdx + 1}모둠`;
+    }
+
+    function renderGroups(groups) {
+        currentGroups = groups;
+        const grid = document.getElementById('groupsGrid');
+        grid.innerHTML = '';
+
+        groups.forEach((group, idx) => {
+            const card = document.createElement('div');
+            card.className = 'group-card';
+            
+            const groupName = getGroupName(idx);
+
+            let listHTML = '';
+            if (group.length === 0) {
+                listHTML = `<li style="color: #a0aec0; font-size: 0.95rem; padding: 10px; text-align: center;">(학생 없음)</li>`;
+            } else {
+                listHTML = group.map(member => {
+                    const isPinned = pinnedStudents[member] === idx;
+                    const pinnedClass = isPinned ? 'pinned' : '';
+                    const pinBadge = isPinned ? '📌' : '📍';
+                    const safeName = member.replace(/'/g, "\\'");
+                    
+                    return `<li class="student-item ${pinnedClass}">
+                        <span onclick="togglePin('${safeName}', ${idx})" style="flex-grow: 1; cursor: pointer;" title="클릭하여 고정/해제">
+                            ${member}
+                        </span>
+                        <div class="student-controls">
+                            <span onclick="togglePin('${safeName}', ${idx})" title="고정하기/해제" style="cursor: pointer; font-size: 0.9rem;">
+                                ${pinBadge}
+                            </span>
+                            <span class="btn-remove-student" onclick="removeStudentFromGroup(${idx}, '${safeName}')" title="전출/삭제">
+                                ✕
+                            </span>
+                        </div>
+                    </li>`;
+                }).join('');
+            }
+
+            card.innerHTML = `
+                <div class="group-header-row">
+                    <input type="text" class="group-title-input" value="${groupName}" onchange="updateGroupName(${idx}, this.value)" placeholder="모둠 이름 입력">
+                    <span class="group-member-count">(${group.length}명)</span>
+                </div>
+                <ul>${listHTML}</ul>
+                <div class="add-student-box">
+                    <input type="text" id="addInput-${idx}" class="add-student-input" placeholder="+ 학생 이름" onkeydown="if(event.key==='Enter') addStudentToGroup(${idx})">
+                    <button class="btn-add-student" onclick="addStudentToGroup(${idx})">추가</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        document.getElementById('copyBtn').style.display = 'block';
+    }
+
+    function copyResults() {
+        const cards = document.querySelectorAll('.group-card');
+        if (cards.length === 0) return;
+
+        let resultText = '[ 모둠 편성 결과 ]\n\n';
+        cards.forEach((card, idx) => {
+            const groupTitle = getGroupName(idx);
+            const members = Array.from(card.querySelectorAll('.student-item > span')).map(el => el.innerText.trim()).join(', ');
+            resultText += `${groupTitle}\n- ${members || '없음'}\n\n`;
+        });
+
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = resultText;
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextarea);
+
+        showMessage('📋 결과가 클립보드에 복사되었습니다!');
+    }
+</script>
+
+</body>
+</html>
